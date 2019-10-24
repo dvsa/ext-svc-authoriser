@@ -1,6 +1,6 @@
 # ext-svc-authoriser
 
-Lambda authoriser for JWT-based authentication via Azure AD.
+Lambda authoriser for JWT-based authentication via Azure AD B2C.
 
 ### Prerequisites
 * Node 8.10
