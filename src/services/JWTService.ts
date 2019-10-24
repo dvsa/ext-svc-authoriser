@@ -25,7 +25,7 @@ class JWTService {
              if ("SecretString" in data) {
                 secret = data.SecretString;
                 console.log("Config fetched!");
-            } 
+            }
              const config = JSON.parse(secret);
             // Check if config is valid
              if (!config || !config.azure || !config.azure.tennant || !config.azure.appId || !config.azure.issuer || !config.azure.jwk_endpoint) {
