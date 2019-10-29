@@ -15,7 +15,7 @@ import AuthorizationError from "../models/exceptions/AuthorizationError";
  * @returns - Promise<Policy | undefined>
  */
 const authoriser: any = async (event: any, context: Context): Promise<Policy | undefined> => {
-
+    let region = "";
     console.log("authoriser Context received as =>", context);
     if (!event.authorizationToken) {
         context.fail(`No authorization methods provided.\nEvent dump:\n${event}\nContext dump:\n${context}`);
@@ -29,13 +29,18 @@ const authoriser: any = async (event: any, context: Context): Promise<Policy | u
         return undefined;
     }
 
+    if (process.env.REGION === undefined) {
+        context.fail(`REGION environment variable s not defined: Bearer.\nEvent dump:\n${event}\nContext dump:\n${context}`);
+        return undefined;
+    } else { region = process.env.REGION; }
+
     return new JWTService().verify(token)
         .then((result: any) => {
             const statements: Statement[] = [
                 new StatementBuilder()
                     .setAction("execute-api:Invoke")
                     .setEffect(Effect.Allow)
-                    .setResourceRegion("eu-west-1")
+                    .setResourceRegion(region)
                     .setResourceAccountId("*")
                     .setResourceApiId("*")
                     .setResourceStageName("*")
@@ -64,7 +69,7 @@ const authoriser: any = async (event: any, context: Context): Promise<Policy | u
                 new StatementBuilder()
                     .setAction("execute-api:Invoke")
                     .setEffect(Effect.Deny)
-                    .setResourceRegion("eu-west-1")
+                    .setResourceRegion(region)
                     .setResourceAccountId("*")
                     .setResourceApiId("*")
                     .setResourceStageName("*")
