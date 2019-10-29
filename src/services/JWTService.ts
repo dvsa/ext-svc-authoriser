@@ -26,7 +26,7 @@ class JWTService {
                 secret = data.SecretString;
                 console.log("Config fetched!");
             } else {
-             throw new AuthorizationError(ERRORMESSAGES.AZURE_CONFIGURATION_NOT_VALID);
+             throw new AuthorizationError(ERRORMESSAGES.INVALID_SECRET_KEY);
              }
 
              const config = JSON.parse(secret);
