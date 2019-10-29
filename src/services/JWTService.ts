@@ -15,11 +15,13 @@ class JWTService {
         const decodedToken: any = JWT.decode(token, { complete: true });
         console.log("decoded token payload is => ", decodedToken );
 
-        const secretName = "${SECRET_NAME}";
-        const client = new AWS.SecretsManager({region: "${REGION}"});
+        const secretName = process.env.SECRET_NAME;
+        const client = new AWS.SecretsManager({region: process.env.REGION});
         let secret: any;
-
-        return client.getSecretValue({SecretId: secretName}).promise().then((data) => {
+        if (secretName === undefined) {
+            throw new AuthorizationError(ERRORMESSAGES.SECRET_ENVIRONMENT_NOT_FOUND);
+        }
+        return await client.getSecretValue({SecretId: secretName}).promise().then((data) => {
             // const config: any = Configuration.getInstance(resolve(`${__dirname}/../config/config.yml`)).getConfig();
              // Decrypts secret using the associated KMS CMK.
              if ("SecretString" in data) {
