@@ -1,0 +1,71 @@
+{
+  "name": "cvs-svc-authoriser",
+  "version": "1.0.0",
+  "description": "Lambda authoriser for validating a user's Azure AD JWT and generating an access policy.",
+  "main": "handler.js",
+  "scripts": {
+    "build": "node_modules/typescript/bin/tsc --rootDir ./ --outDir build --sourceMap false && npm run build:copy && npm run build:install",
+    "build:copy": "cp package.json package-lock.json build && cd src && find ./**/*.yml | cpio -pdm ../build",
+    "build:install": "cd build && npm install --production",
+    "test": "npm run build && BRANCH=local node_modules/.bin/mocha build/tests/**/*.unitTest.js",
+    "prepush": "BRANCH=local npm test && npm run tslint",
+    "predeploy": "npm install && npm run prepush",
+    "security-checks": "git secrets --scan && git log -p | scanrepo",
+    "tslint": "tslint src/**/*.ts tests/**/*.ts",
+    "sonar-scanner": "npm run tslint && npm run coverage && sonar-scanner",
+    "coverage": "BRANCH=local nyc mocha tests/unit/*.unitTest.ts && nyc report --reporter=lcov",
+    "audit-dep": "npm audit --json | audit-filter --nsp-config=.nsprc --audit=-"
+  },
+  "nyc": {
+    "include": [
+      "src/**/*.ts",
+      "src/**/*.tsx"
+    ],
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "text-summary",
+      "html"
+    ],
+    "sourceMap": true,
+    "instrument": true
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.555.0",
+    "jsonwebtoken": "^8.5.1",
+    "node-yaml": "^3.2.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4",
+    "typemoq": "^2.1.0"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.25",
+    "@types/chai": "^4.1.7",
+    "@types/jsonwebtoken": "^8.3.2",
+    "@types/lodash.mapvalues": "^4.6.6",
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.14.6",
+    "@types/request-promise": "^4.1.43",
+    "audit-filter": "^0.4.3",
+    "chai": "^4.2.0",
+    "gulp": "^4.0.2",
+    "mocha": "^5.2.0",
+    "nyc": "^14.1.1",
+    "serverless": "^1.42.3",
+    "serverless-dynamodb-local": "^0.2.37",
+    "serverless-offline": "^4.10.3",
+    "serverless-plugin-typescript": "^1.1.7",
+    "supertest": "^3.4.2",
+    "swagger-jsdoc": "^3.2.9",
+    "ts-node-register": "^1.0.0",
+    "tslint": "^5.16.0",
+    "typescript": "^3.4.5"
+  }
+}
