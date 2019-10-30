@@ -26,12 +26,14 @@ class JWTService {
              // Decrypts secret using the associated KMS CMK.
              if ("SecretString" in data) {
                 secret = data.SecretString;
-                console.log("Config fetched!");
+                console.log(`secret fetched: ${secret}`);
             } else {
              throw new AuthorizationError(ERRORMESSAGES.INVALID_SECRET_KEY);
              }
 
              const config = JSON.parse(secret);
+             console.log(`config object: ${config}`);
+
             // Check if config is valid
              if (!config || !config.azure || !config.azure.tennant || !config.azure.appId || !config.azure.issuer || !config.azure.jwk_endpoint) {
                 throw new AuthorizationError(ERRORMESSAGES.AZURE_CONFIGURATION_NOT_VALID);
