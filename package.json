@@ -59,7 +59,7 @@
     "mocha": "^5.2.0",
     "nyc": "^14.1.1",
     "serverless": "^1.42.3",
-    "serverless-offline": "^5.12.0",
+    "serverless-offline": "^12.0.4",
     "serverless-plugin-typescript": "^1.1.7",
     "supertest": "^3.4.2",
     "swagger-jsdoc": "^3.2.9",
