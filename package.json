@@ -56,7 +56,7 @@
     "audit-filter": "^0.4.3",
     "chai": "^4.2.0",
     "gulp": "^4.0.2",
-    "mocha": "^5.2.0",
+    "mocha": "^10.2.0",
     "nyc": "^14.1.1",
     "serverless": "^1.42.3",
     "serverless-offline": "^5.12.0",
